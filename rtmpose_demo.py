@@ -6,7 +6,7 @@ import os
 
 os.makedirs('output_frames', exist_ok=True)
 
-device = 'cuda:3'  # 'cuda:0' for GPU, 'cpu' for CPU
+device = 'cuda'  # 'cuda:0' for GPU, 'cpu' for CPU
 backend = 'onnxruntime'  # opencv, onnxruntime, openvino
 
 video_path = "rte_far_seg_1.mp4"

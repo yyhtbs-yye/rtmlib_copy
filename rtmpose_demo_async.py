@@ -127,5 +127,5 @@ async def main():
 if __name__ == "__main__":
     # You can tune this up or down depending on how many threads you want
     # working on body(frame) in parallel.
-    NUM_WORKERS = 2
+    NUM_WORKERS = 4
     asyncio.run(main())

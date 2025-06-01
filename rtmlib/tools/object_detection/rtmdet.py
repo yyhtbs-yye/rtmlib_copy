@@ -6,7 +6,6 @@ import numpy as np
 from ..base import BaseTool
 from .post_processings import multiclass_nms
 
-
 class RTMDet(BaseTool):
 
     def __init__(self,

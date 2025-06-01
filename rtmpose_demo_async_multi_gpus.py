@@ -5,13 +5,11 @@ import os
 from rtmlib import Body
 from tqdm import tqdm
 
-# --------------------------- CONFIG ---------------------------------
 VIDEO_PATH   = "rte_far_seg_1.mp4"
 BACKEND      = "onnxruntime"         # opencv, onnxruntime, openvino
 GPU_DEVICES  = [f"cuda:{i}" for i in range(4)]   # cuda:0 … cuda:3
 NUM_WORKERS  = len(GPU_DEVICES)      # 4 async workers
 QUEUE_SIZE   = 8                     # tune for throughput
-# --------------------------------------------------------------------
 
 os.makedirs("output_frames", exist_ok=True)
 
@@ -31,8 +29,6 @@ bodies = [
 
 cap = cv2.VideoCapture(VIDEO_PATH)
 total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-
-# --------------------------- TASKS ----------------------------------
 
 async def producer(frame_q: asyncio.Queue):
     """Read frames and push them into the queue."""
