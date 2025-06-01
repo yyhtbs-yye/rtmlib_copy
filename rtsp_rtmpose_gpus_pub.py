@@ -40,6 +40,11 @@ def parse_args():
         default=int(os.getenv('QUEUE_SIZE', '8')),
         help='Async frame queue max size'
     )
+    parser.add_argument(
+        '--cuda_visible_devices',
+        default=os.getenv('CUDA_VISIBLE_DEVICES', '0,1,2,3'),
+        help='Comma-separated list of CUDA devices to use (e.g. 0,1,2,3)'
+    )
     return parser.parse_args()
 
 async def worker_loop(worker_id: int,
@@ -58,21 +63,29 @@ async def worker_loop(worker_id: int,
             break
 
         frame_id, frame_np = item
+
+        height, width = frame_np.shape[:2]
+
+        scale = 1.0
+
         tic = time.time()
         # Run Body() on this worker’s dedicated GPU in executor
-        keypoints, scores = await loop.run_in_executor(
+        bboxes, keypoints, scores = await loop.run_in_executor(
             None, lambda: body(frame_np)
         )
         fps = 1.0 / (time.time() - tic) if tic else 0.0
 
         # Convert keypoints and scores to nested lists for JSON serialization
         # keypoints: list of (N, K, 2) arrays or similar; ensure each is python list
+        bboxes_list = [bx.tolist() for bx in bboxes]
         keypoints_list = [kp.tolist() for kp in keypoints]
         scores_list = [sc.tolist() for sc in scores]
 
         payload = {
             'frame_id': frame_id,
             'single_gpu_fps': fps,
+            'scale': scale,
+            'bboxes': bboxes_list,
             'keypoints': keypoints_list,
             'scores': scores_list
         }

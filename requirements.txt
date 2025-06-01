@@ -1,6 +1,8 @@
-numpy
-onnxruntime
-onnxruntime-gpu
-opencv-contrib-python
-opencv-python
+av==14.4.0
+numpy==1.26.1
+onnxruntime==1.22.0
+onnxruntime-gpu==1.22.0
+opencv-contrib-python==4.11.0.86
+opencv-python==4.11.0.86
+paho-mqtt==2.1.0
 tqdm
