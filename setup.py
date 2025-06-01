@@ -102,7 +102,7 @@ def parse_requirements(fname='requirements.txt', with_version=True):
 
 if __name__ == '__main__':
     setup(name='rtmlib',
-          version=get_version(),
+          version="0.1.0",
           description='A library for real-time pose estimation.',
           author='Tau-J',
           author_email='taujiang@outlook.com',
