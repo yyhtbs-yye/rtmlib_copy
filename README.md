@@ -1,4 +1,4 @@
-# rtmlib
+# rtmlib (with MultiGPU Support, Batch Processing)
 
 ![demo](https://github.com/Tau-J/rtmlib/assets/13503330/b7e8ce8b-3134-43cf-bba6-d81656897289)
 
