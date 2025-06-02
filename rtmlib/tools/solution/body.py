@@ -141,8 +141,8 @@ class Body:
             return keypoints, scores
 
         else:
-            bboxes = self.det_model(image)
-            keypoints, scores = self.pose_model(image, bboxes=bboxes)
+            bboxes, bbox_scores = self.det_model(image)
+            keypoints, keypoint_scores = self.pose_model(image, bboxes=bboxes)
 
-            return bboxes, keypoints, scores
+            return bboxes, bbox_scores, keypoints, keypoint_scores
 

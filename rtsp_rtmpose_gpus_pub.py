@@ -70,7 +70,7 @@ async def worker_loop(worker_id: int,
 
         tic = time.time()
         # Run Body() on this worker’s dedicated GPU in executor
-        bboxes, keypoints, scores = await loop.run_in_executor(
+        bboxes, bbox_scores, keypoints, keypoint_scores = await loop.run_in_executor(
             None, lambda: body(frame_np)
         )
         fps = 1.0 / (time.time() - tic) if tic else 0.0
@@ -79,15 +79,17 @@ async def worker_loop(worker_id: int,
         # keypoints: list of (N, K, 2) arrays or similar; ensure each is python list
         bboxes_list = [bx.tolist() for bx in bboxes]
         keypoints_list = [kp.tolist() for kp in keypoints]
-        scores_list = [sc.tolist() for sc in scores]
+        bbox_scores_list = [bsc.tolist() for bsc in bbox_scores]
+        keypoint_scores_list = [ksc.tolist() for ksc in keypoint_scores]
 
         payload = {
             'frame_id': frame_id,
             'single_gpu_fps': fps,
             'scale': scale,
             'bboxes': bboxes_list,
+            'bboxe_scores': bbox_scores_list,
             'keypoints': keypoints_list,
-            'scores': scores_list
+            'keypoint_scores': keypoint_scores_list,
         }
         client.publish(topic, json.dumps(payload), qos=0)
 

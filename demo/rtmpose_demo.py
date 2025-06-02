@@ -35,7 +35,7 @@ with tqdm(total=total_frames, desc="Processing frames", unit="frame") as pbar:
         height, width = frame.shape[:2]
 
         start_time = time.time()
-        keypoints, scores = body(frame)
+        bboxes, bbox_scores, keypoints, keypoint_scores = body(frame)
         elapsed_time = time.time() - start_time
 
         fps = 1.0 / elapsed_time if elapsed_time > 0 else 0

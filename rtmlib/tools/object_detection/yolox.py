@@ -121,6 +121,7 @@ class YOLOX(BaseTool):
                 iscat = final_cls_inds == 0
                 isbbox = [i and j for (i, j) in zip(isscore, iscat)]
                 final_boxes = final_boxes[isbbox]
+                final_scores = final_scores[isbbox]
 
         elif outputs.shape[-1] == 5:
             # onnx contains nms module
@@ -131,5 +132,6 @@ class YOLOX(BaseTool):
             isscore = final_scores > 0.3
             isbbox = [i for i in isscore]
             final_boxes = final_boxes[isbbox]
+            final_scores = final_scores[isbbox]
 
-        return final_boxes
+        return final_boxes, final_scores
