@@ -26,7 +26,7 @@ def parse_args():
     )
     parser.add_argument(
         '--topic',
-        default=os.getenv('TOPIC', 'poses/frames'),
+        default=os.getenv('TOPIC', 'rtmpose'),
         help='MQTT topic to publish pose data'
     )
     parser.add_argument(
@@ -82,17 +82,30 @@ async def worker_loop(worker_id: int,
         bbox_scores_list = [bsc.tolist() for bsc in bbox_scores]
         keypoint_scores_list = [ksc.tolist() for ksc in keypoint_scores]
 
-        payload = {
-            'frame_id': frame_id,
-            'single_gpu_fps': fps,
-            'scale': scale,
-            'bboxes': bboxes_list,
-            'bboxe_scores': bbox_scores_list,
-            'keypoints': keypoints_list,
-            'keypoint_scores': keypoint_scores_list,
-        }
-        client.publish(topic, json.dumps(payload), qos=0)
+        client.publish(
+            f"{topic}/bboxes",
+            json.dumps({
+                'frame_id': frame_id,
+                'single_gpu_fps': fps,
+                'scale': scale,
+                'bboxes': bboxes_list,
+                'bboxe_scores': bbox_scores_list
+            }),
+            qos=0
+        )
 
+        # Publish to 'keypoints' subtopic
+        client.publish(
+            f"{topic}/keypoints",
+            json.dumps({
+                'frame_id': frame_id,
+                'single_gpu_fps': fps,
+                'scale': scale,
+                'keypoints': keypoints_list,
+                'keypoint_scores': keypoint_scores_list
+            }),
+            qos=0
+        )
 async def main():
     args = parse_args()
 
